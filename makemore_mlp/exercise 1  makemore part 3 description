@@ -1,0 +1,22 @@
+1 init:
+loss change:
+    after 10 000 steps: 2.9013 -> 2.9666
+observations:
+    Network doesn't train at all
+    activations in all layers are initally very spiked up around 0.0 and totally spread out in deeper layers
+    gradient distribution behaves similarly, also weights gradients 
+
+2 init:
+loss change: 
+    after 10000 steps: 2.8563 -> 2.5961
+    after 20000 steps: loss is: 3.16
+activations are the same like before
+gradient distribution is Linear layers is not so flat like before 
+
+
+WHY MY NEURAL NET BEHAVES LIKE THAT?
+
+"If you have tanh or ReLu activation, or anything where g(0)=0 then all the outputs will be 0, and the gradients for the weights will always be 0. Hence you will not have any learning at all." ~ https://stats.stackexchange.com/questions/27112/danger-of-setting-all-initial-weights-to-zero-in-backpropagation#27152
+I use tanh activations so my net don't learn at all
+
+ E02: BatchNorm, unlike other normalization layers like LayerNorm/GroupNorm etc. has the big advantage that after training, the batchnorm gamma/beta can be "folded into" the weights of the preceeding Linear layers, effectively erasing the need to forward it at test time. Set up a small 3-layer MLP with batchnorms, train the network, then "fold" the batchnorm gamma/beta into the preceeding Linear layer's W,b by creating a new W2, b2 and erasing the batch norm. Verify that this gives the same forward pass during inference. i.e. we see that the batchnorm is there just for stabilizing the training, and can be thrown out after training is done! pretty cool.
